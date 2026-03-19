@@ -33,7 +33,7 @@ export default function PageShell({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="font-serif text-sm font-semibold tracking-[0.18em] text-[#c9a84c] pointer-events-none select-none"
+            className="font-serif text-sm font-semibold tracking-[0.18em] text-[#7c4258] pointer-events-none select-none"
           >
             TINTEL
           </motion.span>
@@ -48,7 +48,7 @@ export default function PageShell({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mb-4 text-xs font-sans tracking-widest uppercase text-[#a07830] border border-[rgba(201,168,76,0.40)] rounded-full px-4 py-1.5 bg-[rgba(232,213,163,0.15)]"
+            className="mb-4 rounded-full border border-[rgba(107,35,57,0.2)] bg-[rgba(255,255,255,0.52)] px-4 py-1.5 text-xs font-sans tracking-widest uppercase text-[#7c4258]"
           >
             {contextPill}
           </motion.p>
@@ -57,10 +57,10 @@ export default function PageShell({
         {/* Page title */}
         {title && (
           <motion.h1
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl md:text-5xl font-serif font-semibold text-[#3d2a1a] text-center mb-8"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-8 text-center font-serif text-4xl font-semibold text-[#332631] md:text-5xl"
           >
             {title}
           </motion.h1>

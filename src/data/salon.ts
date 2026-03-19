@@ -23,6 +23,14 @@ export interface Master {
   initials: string
   experienceLabel: string
   specialtyCategoryIds: string[]
+  credentials?: MasterCredential[]
+}
+
+export interface MasterCredential {
+  id: string
+  name: string
+  type: string
+  fileUrl: string
 }
 
 export type BookingPeriod = 'morning' | 'afternoon' | 'evening'
@@ -53,6 +61,7 @@ export interface TrendItem {
   description: LocalizedText
   gradient: string
   emoji: string
+  image?: string
 }
 
 export interface BookingRecord {

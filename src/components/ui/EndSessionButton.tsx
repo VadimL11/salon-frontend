@@ -26,10 +26,10 @@ export default function EndSessionButton() {
       className="
         flex items-center gap-1.5 px-3.5 py-2 rounded-full
         text-[11px] font-sans font-medium tracking-wide
-        text-[#a07830] border border-[rgba(201,168,76,0.38)]
-        bg-[rgba(253,250,245,0.70)] backdrop-blur-sm
-        hover:bg-[rgba(232,213,163,0.28)] transition-[background-color,box-shadow,transform] duration-150
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-gold
+        text-[#6b2339] border border-[rgba(107,35,57,0.22)]
+        bg-[rgba(255,255,255,0.62)] backdrop-blur-sm
+        hover:bg-[rgba(107,35,57,0.08)] transition-[background-color,box-shadow,transform] duration-150
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8f5267]
         select-none
       "
       title={t.endSession}

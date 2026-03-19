@@ -24,17 +24,17 @@ export default function DarkGlassCard({
       whileHover={onClick ? {
         y: -2,
         scale: 1.01,
-        boxShadow: '0 14px 34px rgba(201,168,76,0.10), inset 0 1px 0 rgba(255,255,255,0.05)',
-        borderColor: 'rgba(201,168,76,0.32)',
+        boxShadow: '0 18px 40px rgba(63,31,44,0.18), inset 0 1px 0 rgba(255,255,255,0.05)',
+        borderColor: 'rgba(143,82,103,0.32)',
       } : undefined}
       whileTap={onClick ? { scale: 0.992, y: 0 } : undefined}
       onClick={onClick}
       className={`rounded-2xl p-6 ${onClick ? 'cursor-pointer' : ''} transition-colors duration-150 select-none ${className}`}
       style={{
-        background: 'linear-gradient(135deg, rgba(30,27,22,0.85) 0%, rgba(20,18,15,0.78) 100%)',
+        background: 'linear-gradient(135deg, rgba(39,24,35,0.9) 0%, rgba(19,26,43,0.84) 100%)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(201,168,76,0.18)',
+        border: '1px solid rgba(143,82,103,0.18)',
         boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)',
         willChange: 'transform',
       }}

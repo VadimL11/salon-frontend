@@ -20,12 +20,12 @@ export default function PricePage() {
             delay={0.1 + index * 0.08}
             className="flex flex-col items-center gap-4 px-5 py-8 text-center"
           >
-            <div className="text-2xl text-[#c9a84c]">⏱</div>
-            <h3 className="font-serif text-base font-semibold leading-snug text-[#3d2a1a]">
+            <div className="text-2xl text-[#8f5267]">⏱</div>
+            <h3 className="font-serif text-base font-semibold leading-snug text-[#332631]">
               {getLocalizedText(service.title, language)}
             </h3>
-            <p className="text-xs tracking-wide text-[#a07830]">{service.durationMinutes} min</p>
-            <p className="font-serif text-2xl font-semibold text-[#3d2a1a]">€{service.price}</p>
+            <p className="text-xs tracking-wide text-[#7c4258]">{service.durationMinutes} min</p>
+            <p className="font-serif text-2xl font-semibold text-[#332631]">€{service.price}</p>
           </GlassCard>
         ))}
       </div>

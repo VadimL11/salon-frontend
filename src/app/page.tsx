@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { ArrowRight, Languages } from 'lucide-react'
 import InteractiveBeautyBackground from '@/components/ui/InteractiveBeautyBackground'
 import GlassCard from '@/components/ui/GlassCard'
 import GoldButton from '@/components/ui/GoldButton'
@@ -38,17 +39,18 @@ export default function LanguagePage() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <p className="text-xs font-sans font-medium tracking-[0.28em] uppercase text-[#a07830] mb-1">
-            {t.tagline}
-          </p>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.42)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.28em] text-[#7c4258] shadow-[inset_0_1px_0_rgba(255,255,255,0.78)]">
+            <Languages className="h-3.5 w-3.5" strokeWidth={1.8} />
+            <span>{t.tagline}</span>
+          </div>
           <h1
-            className="font-serif font-semibold text-[#3d2a1a]"
+            className="font-serif font-semibold text-[#332631]"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 5.5rem)', letterSpacing: '-0.01em', lineHeight: 1.05 }}
           >
             TINTEL
           </h1>
           <h2
-            className="font-serif italic font-light text-[#7a5c44]"
+            className="font-serif italic font-light text-[#6b5a66]"
             style={{ fontSize: 'clamp(1.4rem, 4vw, 2.5rem)', letterSpacing: '0.22em' }}
           >
             BEAUTY
@@ -69,18 +71,18 @@ export default function LanguagePage() {
               onClick={() => setSelected(lang.code)}
               className={`flex-1 flex flex-col items-center gap-3 py-7 transition-all duration-200 ${
                 selected === lang.code
-                  ? 'border-[rgba(201,168,76,0.7)] bg-[rgba(232,213,163,0.30)] shadow-[0_0_24px_rgba(201,168,76,0.25)]'
+                  ? 'border-[rgba(107,35,57,0.34)] bg-[rgba(107,35,57,0.08)] shadow-[0_0_26px_rgba(107,35,57,0.14)]'
                   : ''
               }`}
             >
-              <span className="text-4xl leading-none">{lang.flag}</span>
-              <span className="font-sans text-sm font-medium tracking-wide text-[#5c4030]">
+              <span className="text-5xl leading-none drop-shadow-sm">{lang.flag}</span>
+              <span className="font-sans text-sm font-semibold tracking-wide text-[#5c4030]">
                 {lang.label}
               </span>
               {selected === lang.code && (
                 <motion.div
                   layoutId="lang-indicator"
-                  className="w-4 h-0.5 rounded-full bg-gradient-to-r from-[#e8d5a3] to-[#c9a84c]"
+                  className="h-0.5 w-4 rounded-full bg-[linear-gradient(90deg,#8f5267_0%,#6b2339_55%,#1d2942_100%)]"
                 />
               )}
             </GlassCard>
@@ -94,7 +96,8 @@ export default function LanguagePage() {
           transition={{ delay: 0.6, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <GoldButton onClick={handleStart} className="px-14 py-4 text-base">
-            {DICT[selected].common.start}
+            <span>{DICT[selected].common.start}</span>
+            <ArrowRight className="h-4 w-4" strokeWidth={1.9} />
           </GoldButton>
         </motion.div>
 

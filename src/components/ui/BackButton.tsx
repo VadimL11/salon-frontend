@@ -21,11 +21,11 @@ export default function BackButton({ label }: { label?: string }) {
       className="
         mt-6 px-7 py-2.5 rounded-full
         text-sm font-sans font-medium tracking-wide
-        text-[#a07830] border border-[rgba(201,168,76,0.40)]
-        bg-[rgba(232,213,163,0.10)]
-        hover:bg-[rgba(232,213,163,0.22)]
+        text-[#6b2339] border border-[rgba(107,35,57,0.24)]
+        bg-[rgba(255,255,255,0.42)]
+        hover:bg-[rgba(107,35,57,0.08)]
         transition-[background-color,box-shadow,transform] duration-150 select-none
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8f5267]
       "
     >
       {label ?? defaultLabel}

@@ -55,49 +55,55 @@ const DUST_PARTICLES = [
   { left: '84%', top: '34%', size: 2, delay: -9, blur: 0.2 },
   { left: '86%', top: '76%', size: 4, delay: -10, blur: 0.5 },
   { left: '28%', top: '78%', size: 3, delay: -11, blur: 0.4 },
+  { left: '8%', top: '42%', size: 3.5, delay: -12, blur: 0.3 },
+  { left: '92%', top: '48%', size: 3, delay: -13, blur: 0.5 },
+  { left: '48%', top: '12%', size: 2.5, delay: -14, blur: 0.3 },
+  { left: '68%', top: '82%', size: 3.5, delay: -15, blur: 0.4 },
+  { left: '32%', top: '62%', size: 2, delay: -16, blur: 0.2 },
+  { left: '76%', top: '38%', size: 4, delay: -17, blur: 0.5 },
 ]
 
 function getPalette(variant: BackgroundVariant) {
   if (variant === 'dark') {
     return {
-      base: 'linear-gradient(180deg, #100d0a 0%, #070707 48%, #030303 100%)',
+      base: 'linear-gradient(180deg, #170f16 0%, #0d1220 48%, #06080f 100%)',
       ambient:
-        'radial-gradient(circle at 50% 0%, rgba(223,188,115,0.18) 0%, rgba(5,5,5,0) 38%), radial-gradient(circle at 10% 58%, rgba(255,255,255,0.05) 0%, rgba(5,5,5,0) 30%), radial-gradient(circle at 92% 28%, rgba(210,173,94,0.12) 0%, rgba(5,5,5,0) 34%)',
-      glow: ['rgba(210,173,94,0.18)', 'rgba(255,255,255,0.08)', 'rgba(123,102,77,0.12)'],
-      ribbon: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(210,173,94,0.14) 45%, rgba(255,255,255,0.03) 100%)',
+        'radial-gradient(circle at 50% 0%, rgba(143,82,103,0.24) 0%, rgba(5,5,5,0) 38%), radial-gradient(circle at 10% 58%, rgba(255,255,255,0.05) 0%, rgba(5,5,5,0) 30%), radial-gradient(circle at 92% 28%, rgba(54,76,119,0.18) 0%, rgba(5,5,5,0) 34%)',
+      glow: ['rgba(143,82,103,0.26)', 'rgba(255,255,255,0.08)', 'rgba(54,76,119,0.16)'],
+      ribbon: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(143,82,103,0.16) 45%, rgba(54,76,119,0.08) 100%)',
       overlay:
-        'radial-gradient(circle at 50% 45%, rgba(12,12,12,0.02) 0%, rgba(5,5,5,0.28) 55%, rgba(5,5,5,0.82) 100%)',
-      dust: 'rgba(236,206,141,0.3)',
+        'radial-gradient(circle at 50% 45%, rgba(12,12,12,0.02) 0%, rgba(5,5,5,0.28) 55%, rgba(5,5,5,0.84) 100%)',
+      dust: 'rgba(215,188,200,0.26)',
       edgeShade:
         'radial-gradient(circle at center, rgba(4,4,4,0) 46%, rgba(4,4,4,0.18) 74%, rgba(4,4,4,0.48) 100%)',
       grain:
-        'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.13) 0.55px, transparent 0.9px), radial-gradient(circle at 76% 34%, rgba(236,206,141,0.09) 0.5px, transparent 0.85px), radial-gradient(circle at 60% 78%, rgba(255,255,255,0.08) 0.45px, transparent 0.82px)',
-      veil: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 18%, rgba(210,173,94,0.12) 48%, rgba(255,255,255,0.03) 76%, rgba(255,255,255,0) 100%)',
-      halo: 'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,0) 0deg, rgba(220,188,112,0.18) 94deg, rgba(255,255,255,0.04) 160deg, rgba(255,255,255,0) 320deg)',
-      mist: 'radial-gradient(circle at 35% 40%, rgba(255,255,255,0.18) 0%, rgba(220,188,112,0.16) 34%, rgba(8,8,8,0) 74%)',
-      filament: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 18%, rgba(220,188,112,0.20) 48%, rgba(255,255,255,0.08) 76%, rgba(255,255,255,0) 100%)',
-      coreGlow: 'radial-gradient(circle, rgba(220,188,112,0.22) 0%, rgba(220,188,112,0) 72%)',
+        'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.13) 0.55px, transparent 0.9px), radial-gradient(circle at 76% 34%, rgba(143,82,103,0.09) 0.5px, transparent 0.85px), radial-gradient(circle at 60% 78%, rgba(96,130,193,0.08) 0.45px, transparent 0.82px)',
+      veil: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 18%, rgba(143,82,103,0.14) 48%, rgba(54,76,119,0.08) 76%, rgba(255,255,255,0) 100%)',
+      halo: 'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,0) 0deg, rgba(143,82,103,0.2) 94deg, rgba(255,255,255,0.04) 160deg, rgba(255,255,255,0) 320deg)',
+      mist: 'radial-gradient(circle at 35% 40%, rgba(255,255,255,0.12) 0%, rgba(143,82,103,0.16) 34%, rgba(8,8,8,0) 74%)',
+      filament: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 18%, rgba(143,82,103,0.2) 48%, rgba(148,165,201,0.08) 76%, rgba(255,255,255,0) 100%)',
+      coreGlow: 'radial-gradient(circle, rgba(143,82,103,0.26) 0%, rgba(143,82,103,0) 72%)',
     }
   }
 
   return {
-    base: 'linear-gradient(180deg, #fffdfb 0%, #fbf7f0 46%, #efe4d3 100%)',
+    base: 'linear-gradient(180deg, #fbf8f1 0%, #f6efe6 26%, #efe3dc 58%, #e5d9e1 100%)',
     ambient:
-      'radial-gradient(circle at 50% 12%, rgba(255,255,255,0.92) 0%, rgba(255,250,244,0.56) 24%, rgba(253,250,245,0) 48%), radial-gradient(circle at 18% 34%, rgba(241,222,193,0.34) 0%, rgba(253,250,245,0) 34%), radial-gradient(circle at 82% 28%, rgba(228,204,166,0.26) 0%, rgba(253,250,245,0) 36%), radial-gradient(circle at 50% 72%, rgba(214,184,146,0.18) 0%, rgba(253,250,245,0) 32%)',
-    glow: ['rgba(239,220,189,0.32)', 'rgba(255,255,255,0.38)', 'rgba(215,188,150,0.22)'],
-    ribbon: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(236,219,192,0.36) 46%, rgba(255,255,255,0.08) 100%)',
+      'radial-gradient(circle at 50% 12%, rgba(255,255,255,0.96) 0%, rgba(255,250,244,0.76) 22%, rgba(253,250,245,0) 48%), radial-gradient(circle at 12% 28%, rgba(205,164,129,0.28) 0%, rgba(253,250,245,0) 34%), radial-gradient(circle at 86% 22%, rgba(126,144,181,0.24) 0%, rgba(253,250,245,0) 38%), radial-gradient(circle at 52% 74%, rgba(181,136,153,0.2) 0%, rgba(253,250,245,0) 34%), radial-gradient(circle at 30% 76%, rgba(230,204,158,0.22) 0%, rgba(253,250,245,0) 30%)',
+    glow: ['rgba(219,193,166,0.42)', 'rgba(255,255,255,0.58)', 'rgba(150,165,194,0.28)'],
+    ribbon: 'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(222,199,174,0.42) 36%, rgba(194,173,183,0.28) 64%, rgba(255,255,255,0.12) 100%)',
     overlay:
-      'radial-gradient(circle at 50% 44%, rgba(255,255,255,0) 0%, rgba(253,249,242,0.08) 54%, rgba(236,223,205,0.34) 100%)',
-    dust: 'rgba(141,111,77,0.24)',
+      'radial-gradient(circle at 50% 42%, rgba(255,255,255,0) 0%, rgba(250,244,240,0.08) 48%, rgba(222,210,214,0.22) 100%)',
+    dust: 'rgba(143,82,103,0.24)',
     edgeShade:
-      'radial-gradient(circle at center, rgba(255,255,255,0) 48%, rgba(204,178,146,0.08) 76%, rgba(108,83,60,0.16) 100%)',
+      'radial-gradient(circle at center, rgba(255,255,255,0) 48%, rgba(143,82,103,0.08) 74%, rgba(72,58,64,0.16) 100%)',
     grain:
-      'radial-gradient(circle at 22% 18%, rgba(122,92,68,0.09) 0.55px, transparent 0.92px), radial-gradient(circle at 76% 34%, rgba(255,255,255,0.24) 0.48px, transparent 0.86px), radial-gradient(circle at 58% 80%, rgba(201,168,76,0.06) 0.5px, transparent 0.88px)',
-    veil: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.34) 18%, rgba(231,213,186,0.22) 48%, rgba(255,255,255,0.16) 76%, rgba(255,255,255,0) 100%)',
-    halo: 'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,0) 0deg, rgba(199,166,124,0.12) 110deg, rgba(255,255,255,0.14) 180deg, rgba(255,255,255,0) 320deg)',
-    mist: 'radial-gradient(circle at 35% 40%, rgba(255,255,255,0.66) 0%, rgba(236,219,194,0.3) 34%, rgba(253,250,245,0) 74%)',
-    filament: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.48) 18%, rgba(232,213,181,0.26) 48%, rgba(255,255,255,0.26) 76%, rgba(255,255,255,0) 100%)',
-    coreGlow: 'radial-gradient(circle, rgba(241,226,205,0.62) 0%, rgba(225,198,158,0.2) 36%, rgba(225,198,158,0) 76%)',
+      'radial-gradient(circle at 22% 18%, rgba(107,90,102,0.08) 0.55px, transparent 0.92px), radial-gradient(circle at 76% 34%, rgba(255,255,255,0.32) 0.48px, transparent 0.86px), radial-gradient(circle at 58% 80%, rgba(170,132,92,0.08) 0.5px, transparent 0.88px)',
+    veil: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.48) 18%, rgba(222,199,174,0.3) 46%, rgba(184,164,178,0.24) 72%, rgba(255,255,255,0) 100%)',
+    halo: 'conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,0) 0deg, rgba(143,82,103,0.16) 108deg, rgba(222,199,174,0.24) 180deg, rgba(255,255,255,0) 320deg)',
+    mist: 'radial-gradient(circle at 35% 40%, rgba(255,255,255,0.76) 0%, rgba(221,205,192,0.34) 34%, rgba(253,250,245,0) 74%)',
+    filament: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.58) 18%, rgba(199,168,138,0.26) 46%, rgba(168,180,210,0.24) 76%, rgba(255,255,255,0) 100%)',
+    coreGlow: 'radial-gradient(circle, rgba(247,237,225,0.88) 0%, rgba(216,191,170,0.3) 38%, rgba(216,191,170,0) 76%)',
   }
 }
 
@@ -177,13 +183,41 @@ export default function InteractiveBeautyBackground({
         }}
       />
 
+      <motion.div
+        className="absolute inset-[-18%]"
+        style={{
+          background:
+            variant === 'dark'
+              ? 'linear-gradient(118deg, rgba(255,255,255,0) 18%, rgba(255,255,255,0.06) 38%, rgba(143,82,103,0.12) 52%, rgba(255,255,255,0) 76%)'
+              : 'linear-gradient(118deg, rgba(255,255,255,0) 16%, rgba(255,255,255,0.44) 34%, rgba(232,210,185,0.26) 50%, rgba(255,255,255,0.06) 64%, rgba(255,255,255,0) 78%)',
+          filter: variant === 'dark' ? 'blur(56px)' : 'blur(42px)',
+        }}
+        animate={{
+          rotate: [-7, -3, -7],
+          x: [0, 26, 0],
+          y: [0, -16, 0],
+          opacity: variant === 'dark' ? [0.14, 0.22, 0.16] : [0.38, 0.54, 0.4],
+        }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      <div
+        className="absolute inset-0 opacity-[0.14] mix-blend-soft-light"
+        style={{
+          background:
+            variant === 'dark'
+              ? 'repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 26px, rgba(255,255,255,0.08) 26px 27px), repeating-linear-gradient(28deg, rgba(255,255,255,0) 0 34px, rgba(143,82,103,0.08) 34px 35px)'
+              : 'repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 28px, rgba(255,255,255,0.22) 28px 29px), repeating-linear-gradient(28deg, rgba(255,255,255,0) 0 36px, rgba(207,180,151,0.16) 36px 37px)',
+        }}
+      />
+
       <div
         className="absolute inset-0"
         style={{
           background:
             variant === 'dark'
-              ? 'radial-gradient(circle at 50% 16%, rgba(255,255,255,0.04) 0%, rgba(5,5,5,0) 36%), radial-gradient(circle at 50% 42%, rgba(210,173,94,0.10) 0%, rgba(5,5,5,0) 42%)'
-              : 'radial-gradient(circle at 50% 14%, rgba(255,255,255,0.8) 0%, rgba(253,250,245,0) 36%), radial-gradient(circle at 50% 40%, rgba(232,213,163,0.26) 0%, rgba(253,250,245,0) 42%)',
+              ? 'radial-gradient(circle at 50% 16%, rgba(255,255,255,0.04) 0%, rgba(5,5,5,0) 36%), radial-gradient(circle at 50% 42%, rgba(143,82,103,0.12) 0%, rgba(5,5,5,0) 42%)'
+              : 'radial-gradient(circle at 50% 14%, rgba(255,255,255,0.8) 0%, rgba(253,250,245,0) 36%), radial-gradient(circle at 50% 40%, rgba(143,82,103,0.18) 0%, rgba(253,250,245,0) 42%)',
         }}
       />
 
@@ -194,7 +228,7 @@ export default function InteractiveBeautyBackground({
           filter: variant === 'dark' ? 'blur(50px)' : 'blur(52px)',
         }}
         animate={{
-          opacity: variant === 'dark' ? [0.24, 0.38, 0.28] : [0.54, 0.68, 0.58],
+          opacity: variant === 'dark' ? [0.24, 0.38, 0.28] : [0.66, 0.82, 0.7],
           scale: [0.97, 1.04, 0.99],
         }}
         transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
@@ -218,7 +252,7 @@ export default function InteractiveBeautyBackground({
             animate={{
               x: [0, 18, -10, 0],
               y: [0, -14, 10, 0],
-              opacity: variant === 'dark' ? [0.22, 0.4, 0.26, 0.22] : [0.3, 0.48, 0.34, 0.3],
+              opacity: variant === 'dark' ? [0.22, 0.4, 0.26, 0.22] : [0.38, 0.58, 0.42, 0.38],
               scale: [1, 1.04, 0.98, 1],
             }}
             transition={{
@@ -246,7 +280,7 @@ export default function InteractiveBeautyBackground({
             }}
             animate={{
               scale: [1, 1.08, 0.98, 1],
-              opacity: variant === 'dark' ? [0.35, 0.52, 0.28, 0.35] : [0.5, 0.72, 0.38, 0.5],
+              opacity: variant === 'dark' ? [0.35, 0.52, 0.28, 0.35] : [0.58, 0.82, 0.46, 0.58],
               y: [0, -12, 8, 0],
             }}
             transition={{
@@ -275,7 +309,7 @@ export default function InteractiveBeautyBackground({
               opacity: variant === 'dark' ? 0.5 : 0.66,
             }}
             animate={{
-              opacity: variant === 'dark' ? [0.14, 0.42, 0.16, 0.14] : [0.22, 0.6, 0.28, 0.22],
+              opacity: variant === 'dark' ? [0.14, 0.42, 0.16, 0.14] : [0.3, 0.7, 0.36, 0.3],
               scaleX: [0.94, 1.04, 0.96, 0.94],
               x: [0, 10, -6, 0],
             }}
@@ -312,7 +346,7 @@ export default function InteractiveBeautyBackground({
               x: [0, 12, -6, 0],
               y: [0, -10, 6, 0],
               opacity:
-                variant === 'dark' ? [0.26, 0.36, 0.24, 0.26] : [0.34, 0.46, 0.3, 0.34],
+                variant === 'dark' ? [0.26, 0.36, 0.24, 0.26] : [0.42, 0.56, 0.38, 0.42],
             }}
             transition={{
               duration: 22,
@@ -342,7 +376,7 @@ export default function InteractiveBeautyBackground({
             animate={{
               x: [0, 16, -8, 0],
               y: [0, -12, 10, 0],
-              opacity: variant === 'dark' ? [0.18, 0.3, 0.2, 0.18] : [0.22, 0.4, 0.26, 0.22],
+              opacity: variant === 'dark' ? [0.18, 0.3, 0.2, 0.18] : [0.3, 0.5, 0.34, 0.3],
             }}
             transition={{
               duration: 24,
@@ -381,7 +415,7 @@ export default function InteractiveBeautyBackground({
                 filter: `blur(${particle.blur}px)`,
               }}
               animate={{
-                opacity: variant === 'dark' ? [0.08, 0.24, 0.1, 0.08] : [0.06, 0.18, 0.08, 0.06],
+                opacity: variant === 'dark' ? [0.08, 0.24, 0.1, 0.08] : [0.12, 0.32, 0.14, 0.12],
                 y: [0, -10, 3, 0],
                 x: [0, 3, -2, 0],
                 scale: [1, 1.12, 0.96, 1],

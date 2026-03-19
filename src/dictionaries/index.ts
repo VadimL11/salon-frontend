@@ -100,6 +100,7 @@ export interface Dict {
     title: string
     subtitle: string
     overview: string
+    categories?: string
     masters: string
     services: string
     prices: string
@@ -117,6 +118,7 @@ export interface Dict {
     initials: string
     experience: string
     category: string
+    slug?: string
     icon: string
     brand: string
     price: string
@@ -148,6 +150,10 @@ export interface Dict {
     statusConfirmed: string
     statusCompleted: string
     statusCancelled: string
+    uploadImage?: string
+    removeImage?: string
+    requestFailed?: string
+    saving?: string
   }
   common: {
     back: string

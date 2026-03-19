@@ -17,6 +17,14 @@ function toDateKey(date: Date) {
   return `${year}-${month}-${day}`
 }
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message.replace(/^API Error:\s*\d+\s*/, '').trim()
+  }
+
+  return 'Booking failed. Try another slot.'
+}
+
 export default function BookingPage() {
   const language = useAppStore((state) => state.language)
   const user = useAppStore((state) => state.user)
@@ -27,6 +35,7 @@ export default function BookingPage() {
   const selectedMaster = useAppStore((state) => state.selectedMaster)
   const selectedMasterId = useAppStore((state) => state.selectedMasterId)
   const bookingSlots = useAppStore((state) => state.bookingSlots)
+  const bookings = useAppStore((state) => state.bookings)
   const clearBooking = useAppStore((state) => state.clearBooking)
   const createBooking = useAppStore((state) => state.createBooking)
   const t = DICT[language].booking
@@ -34,11 +43,25 @@ export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined)
   const [confirmed, setConfirmed] = useState(false)
+  const [isBooking, setIsBooking] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [firstName, setFirstName] = useState(user?.firstName ?? '')
   const [lastName, setLastName] = useState(user?.lastName ?? '')
   const [phone, setPhone] = useState(user?.phone ?? '')
   const [email, setEmail] = useState(user?.email ?? '')
   const [note, setNote] = useState('')
+
+  const selectedDateKey = selectedDate ? toDateKey(selectedDate) : null
+  const blockedTimes = new Set(
+    bookings
+      .filter(
+        (booking) =>
+          booking.date === selectedDateKey &&
+          (!selectedMasterId ? false : booking.masterId === selectedMasterId) &&
+          booking.status !== 'cancelled'
+      )
+      .map((booking) => booking.time)
+  )
 
   const groupedSlots = {
     morning: bookingSlots.filter((item) => item.period === 'morning'),
@@ -49,28 +72,37 @@ export default function BookingPage() {
   const formComplete = firstName.trim() && lastName.trim() && phone.trim()
   const canConfirm = Boolean(selectedDate && selectedTime && formComplete)
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!selectedDate || !selectedTime || !formComplete) {
       return
     }
 
-    createBooking({
-      customer: {
-        firstName,
-        lastName,
-        phone,
-        email,
-        role: user?.role,
-      },
-      categoryId: selectedCategoryId,
-      serviceId: selectedServiceId,
-      masterId: selectedMasterId,
-      date: toDateKey(selectedDate),
-      time: selectedTime,
-      note,
-    })
+    setError(null)
+    setIsBooking(true)
+    try {
+      await createBooking({
+        customer: {
+          firstName,
+          lastName,
+          phone,
+          email,
+          role: user?.role,
+        },
+        categoryId: selectedCategoryId,
+        serviceId: selectedServiceId,
+        masterId: selectedMasterId,
+        date: toDateKey(selectedDate),
+        time: selectedTime,
+        note,
+      })
 
-    setConfirmed(true)
+      setConfirmed(true)
+    } catch (err) {
+      console.error('Booking failed:', err)
+      setError(getErrorMessage(err))
+    } finally {
+      setIsBooking(false)
+    }
   }
 
   const resetBooking = () => {
@@ -82,6 +114,7 @@ export default function BookingPage() {
     setPhone(user?.phone ?? '')
     setEmail(user?.email ?? '')
     setNote('')
+    setError(null)
     clearBooking()
   }
 
@@ -94,8 +127,8 @@ export default function BookingPage() {
           className="flex flex-col items-center gap-6 py-16 text-center"
         >
           <div className="text-6xl">✓</div>
-          <h2 className="font-serif text-3xl font-semibold text-[#3d2a1a]">{t.confirmed}</h2>
-          <p className="text-[#7a5c44]">
+          <h2 className="font-serif text-3xl font-semibold text-[#332631]">{t.confirmed}</h2>
+          <p className="text-[#6b5a66]">
             {selectedDate?.toLocaleDateString(language === 'DE' ? 'de-DE' : language === 'GB' ? 'en-GB' : 'uk-UA', {
               weekday: 'long',
               day: 'numeric',
@@ -103,7 +136,7 @@ export default function BookingPage() {
             })}{' '}
             • {selectedTime}
           </p>
-          <p className="text-sm text-[#a07830]">{t.confirmedSub}</p>
+          <p className="text-sm text-[#7c4258]">{t.confirmedSub}</p>
           <GoldButton onClick={resetBooking}>{t.newBooking}</GoldButton>
         </motion.div>
       </PageShell>
@@ -120,13 +153,13 @@ export default function BookingPage() {
             className="flex flex-wrap justify-center gap-3"
           >
             {selectedService && (
-              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(201,168,76,0.35)] bg-[rgba(232,213,163,0.25)] px-4 py-2 text-sm font-medium text-[#3d2a1a]">
-                <span className="text-[#a07830]">{t.service}:</span> {selectedService}
+              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(107,35,57,0.2)] bg-[rgba(255,255,255,0.52)] px-4 py-2 text-sm font-medium text-[#332631]">
+                <span className="text-[#7c4258]">{t.service}:</span> {selectedService}
               </span>
             )}
             {selectedMaster && (
-              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(201,168,76,0.35)] bg-[rgba(232,213,163,0.25)] px-4 py-2 text-sm font-medium text-[#3d2a1a]">
-                <span className="text-[#a07830]">{t.master}:</span> {selectedMaster}
+              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(107,35,57,0.2)] bg-[rgba(255,255,255,0.52)] px-4 py-2 text-sm font-medium text-[#332631]">
+                <span className="text-[#7c4258]">{t.master}:</span> {selectedMaster}
               </span>
             )}
           </motion.div>
@@ -138,13 +171,17 @@ export default function BookingPage() {
           transition={{ delay: 0.15, duration: 0.5 }}
           className="glass-card w-fit rounded-3xl p-6"
         >
-          <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#a07830]">
+          <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#7c4258]">
             <span>◌</span> {t.dateLabel}
           </p>
           <DayPicker
             mode="single"
             selected={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={(date) => {
+              setSelectedDate(date)
+              setSelectedTime(undefined)
+              setError(null)
+            }}
             disabled={{ before: new Date() }}
             fromMonth={new Date()}
           />
@@ -157,32 +194,46 @@ export default function BookingPage() {
             transition={{ duration: 0.4 }}
             className="glass-card w-full max-w-2xl rounded-3xl p-6"
           >
-            <p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#a07830]">
+            <p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#7c4258]">
               <span>◔</span> {t.timeLabel}
             </p>
             {bookingSlots.length === 0 ? (
-              <p className="text-sm text-[#7a5c44]">{t.noSlots}</p>
+              <p className="text-sm text-[#6b5a66]">{t.noSlots}</p>
             ) : (
               <div className="flex flex-col gap-5">
                 {(['morning', 'afternoon', 'evening'] as const).map((period) => (
                   <div key={period}>
-                    <p className="mb-2.5 text-xs font-medium text-[#7a5c44]">{t[period]}</p>
+                    <p className="mb-2.5 text-xs font-medium text-[#6b5a66]">{t[period]}</p>
                     <div className="flex flex-wrap gap-2">
-                      {groupedSlots[period].map((slot) => (
-                        <motion.button
-                          key={slot.id}
-                          onClick={() => setSelectedTime(slot.time)}
-                          whileHover={{ scale: 1.06 }}
-                          whileTap={{ scale: 0.94 }}
-                          className={`rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                            selectedTime === slot.time
-                              ? 'border-transparent bg-gradient-to-r from-[#e8d5a3] via-[#c9a84c] to-[#a07830] text-white shadow-[0_0_16px_rgba(201,168,76,0.40)]'
-                              : 'border-[rgba(201,168,76,0.35)] bg-[rgba(232,213,163,0.12)] text-[#7a5c44] hover:bg-[rgba(232,213,163,0.25)]'
-                          }`}
-                        >
-                          {slot.time}
-                        </motion.button>
-                      ))}
+                      {groupedSlots[period].map((slot) => {
+                        const isBlocked = blockedTimes.has(slot.time)
+
+                        return (
+                          <motion.button
+                            key={slot.id}
+                            onClick={() => {
+                              if (isBlocked) {
+                                return
+                              }
+
+                              setSelectedTime(slot.time)
+                              setError(null)
+                            }}
+                            whileHover={{ scale: 1.06 }}
+                            whileTap={{ scale: 0.94 }}
+                            disabled={isBlocked}
+                            className={`rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                              isBlocked
+                                ? 'cursor-not-allowed border-[rgba(107,90,102,0.14)] bg-[rgba(255,255,255,0.32)] text-[rgba(107,90,102,0.42)]'
+                                : selectedTime === slot.time
+                                  ? 'border-transparent bg-[linear-gradient(135deg,#8f5267_0%,#6b2339_55%,#1d2942_100%)] text-white shadow-[0_0_18px_rgba(65,31,46,0.32)]'
+                                  : 'border-[rgba(107,35,57,0.2)] bg-[rgba(255,255,255,0.46)] text-[#6b5a66] hover:bg-[rgba(107,35,57,0.08)]'
+                            }`}
+                          >
+                            {slot.time}
+                          </motion.button>
+                        )
+                      })}
                     </div>
                   </div>
                 ))}
@@ -198,7 +249,7 @@ export default function BookingPage() {
             transition={{ duration: 0.4 }}
             className="glass-card w-full max-w-2xl rounded-3xl p-6"
           >
-            <p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#a07830]">
+            <p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#7c4258]">
               <span>✎</span> {t.formTitle}
             </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -207,45 +258,52 @@ export default function BookingPage() {
                 placeholder={t.firstName}
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
-                className="w-full rounded-2xl border border-[rgba(201,168,76,0.30)] bg-[rgba(253,250,245,0.7)] px-4 py-3 text-sm text-[#3d2a1a] placeholder-[#b0956a] transition-all duration-200 focus:border-[rgba(201,168,76,0.60)] focus:outline-none focus:shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+                className="w-full rounded-2xl border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.72)] px-4 py-3 text-sm text-[#332631] placeholder-[#9d8893] transition-all duration-200 focus:border-[rgba(107,35,57,0.34)] focus:outline-none focus:shadow-[0_0_12px_rgba(107,35,57,0.12)]"
               />
               <input
                 type="text"
                 placeholder={t.lastName}
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
-                className="w-full rounded-2xl border border-[rgba(201,168,76,0.30)] bg-[rgba(253,250,245,0.7)] px-4 py-3 text-sm text-[#3d2a1a] placeholder-[#b0956a] transition-all duration-200 focus:border-[rgba(201,168,76,0.60)] focus:outline-none focus:shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+                className="w-full rounded-2xl border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.72)] px-4 py-3 text-sm text-[#332631] placeholder-[#9d8893] transition-all duration-200 focus:border-[rgba(107,35,57,0.34)] focus:outline-none focus:shadow-[0_0_12px_rgba(107,35,57,0.12)]"
               />
               <input
                 type="tel"
                 placeholder={t.phone}
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
-                className="w-full rounded-2xl border border-[rgba(201,168,76,0.30)] bg-[rgba(253,250,245,0.7)] px-4 py-3 text-sm text-[#3d2a1a] placeholder-[#b0956a] transition-all duration-200 focus:border-[rgba(201,168,76,0.60)] focus:outline-none focus:shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+                className="w-full rounded-2xl border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.72)] px-4 py-3 text-sm text-[#332631] placeholder-[#9d8893] transition-all duration-200 focus:border-[rgba(107,35,57,0.34)] focus:outline-none focus:shadow-[0_0_12px_rgba(107,35,57,0.12)]"
               />
               <input
                 type="email"
                 placeholder={t.email}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full rounded-2xl border border-[rgba(201,168,76,0.30)] bg-[rgba(253,250,245,0.7)] px-4 py-3 text-sm text-[#3d2a1a] placeholder-[#b0956a] transition-all duration-200 focus:border-[rgba(201,168,76,0.60)] focus:outline-none focus:shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+                className="w-full rounded-2xl border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.72)] px-4 py-3 text-sm text-[#332631] placeholder-[#9d8893] transition-all duration-200 focus:border-[rgba(107,35,57,0.34)] focus:outline-none focus:shadow-[0_0_12px_rgba(107,35,57,0.12)]"
               />
             </div>
             <textarea
               placeholder={t.note}
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              className="mt-4 min-h-[110px] w-full resize-y rounded-2xl border border-[rgba(201,168,76,0.30)] bg-[rgba(253,250,245,0.7)] px-4 py-3 text-sm text-[#3d2a1a] placeholder-[#b0956a] transition-all duration-200 focus:border-[rgba(201,168,76,0.60)] focus:outline-none focus:shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+              className="mt-4 min-h-[110px] w-full resize-y rounded-2xl border border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.72)] px-4 py-3 text-sm text-[#332631] placeholder-[#9d8893] transition-all duration-200 focus:border-[rgba(107,35,57,0.34)] focus:outline-none focus:shadow-[0_0_12px_rgba(107,35,57,0.12)]"
             />
           </motion.div>
         )}
 
         {selectedDate && selectedTime && (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-            <GoldButton onClick={handleConfirm} disabled={!canConfirm} className="px-12 py-4 text-base">
-              {t.confirm}
-            </GoldButton>
-          </motion.div>
+          <div className="flex flex-col items-center gap-4">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+              <GoldButton onClick={handleConfirm} disabled={!canConfirm || isBooking} className="px-12 py-4 text-base">
+                {isBooking ? '...' : t.confirm}
+              </GoldButton>
+            </motion.div>
+            {error && (
+              <div className="w-full max-w-2xl rounded-2xl border border-[rgba(122,64,85,0.18)] bg-[rgba(255,241,245,0.76)] px-4 py-3 text-sm text-[#7a4055] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                {error}
+              </div>
+            )}
+          </div>
         )}
       </div>
     </PageShell>

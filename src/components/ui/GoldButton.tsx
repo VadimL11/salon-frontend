@@ -21,13 +21,13 @@ export default function GoldButton({
     'inline-flex items-center justify-center gap-2',
     'px-8 py-3 rounded-full font-sans font-medium text-sm tracking-wide',
     'transition-[background-color,border-color,box-shadow,transform] duration-150 select-none',
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-0',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8f5267] focus-visible:ring-offset-0',
     disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : '',
     fullWidth ? 'w-full' : '',
   ].join(' ')
 
-  const solid = 'text-white bg-gradient-to-r from-[#e8d5a3] via-[#c9a84c] to-[#a07830] shadow-[0_4px_18px_rgba(201,168,76,0.22)]'
-  const ghost = 'text-[#a07830] border border-[rgba(201,168,76,0.45)] bg-[rgba(232,213,163,0.12)] hover:bg-[rgba(232,213,163,0.22)]'
+  const solid = 'text-[#fff8f8] bg-[linear-gradient(135deg,#8f5267_0%,#6b2339_54%,#1d2942_100%)] shadow-[0_10px_28px_rgba(65,31,46,0.22)]'
+  const ghost = 'text-[#6b2339] border border-[rgba(107,35,57,0.28)] bg-[rgba(255,255,255,0.36)] hover:bg-[rgba(107,35,57,0.08)]'
 
   return (
     <motion.button
@@ -36,8 +36,8 @@ export default function GoldButton({
         y: -1,
         scale: 1.012,
         boxShadow: variant === 'solid'
-          ? '0 8px 24px rgba(201,168,76,0.28)'
-          : '0 8px 20px rgba(201,168,76,0.14)',
+          ? '0 14px 34px rgba(65,31,46,0.26)'
+          : '0 10px 24px rgba(65,31,46,0.12)',
       }}
       whileTap={disabled ? {} : { scale: 0.988, y: 0 }}
       disabled={disabled}

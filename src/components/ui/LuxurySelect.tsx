@@ -18,10 +18,10 @@ export default function LuxurySelect({
   const generatedId = useId()
   const fieldId = id ?? generatedId
   const isLight = variant === 'light'
-  const labelClass = isLight ? 'text-[#8d6a31]' : 'text-[#c6a666]'
+  const labelClass = isLight ? 'text-[#7f455a]' : 'text-[#ccb4bf]'
   const selectClass = isLight
-    ? 'border-[rgba(201,168,76,0.2)] bg-[rgba(253,250,245,0.72)] text-[#3d2a1a] focus:border-[rgba(201,168,76,0.45)] focus:shadow-[0_0_0_2px_rgba(201,168,76,0.10)]'
-    : 'border-[rgba(214,186,120,0.18)] bg-[rgba(18,16,13,0.78)] text-[#f2e2c2] focus:border-[rgba(214,186,120,0.45)] focus:shadow-[0_0_0_2px_rgba(214,186,120,0.08)]'
+    ? 'border-[rgba(107,35,57,0.16)] bg-[rgba(255,255,255,0.68)] text-[#332631] focus:border-[rgba(107,35,57,0.34)] focus:shadow-[0_0_0_2px_rgba(107,35,57,0.10)]'
+    : 'border-[rgba(143,82,103,0.18)] bg-[rgba(25,31,49,0.82)] text-[#f6ebef] focus:border-[rgba(143,82,103,0.42)] focus:shadow-[0_0_0_2px_rgba(143,82,103,0.10)]'
 
   return (
     <div className="w-full">

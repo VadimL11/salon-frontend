@@ -39,11 +39,11 @@ function FloatingShapes() {
         </Sphere>
       </Float>
 
-      {/* Bottom right floating torus (gold-ish) */}
+      {/* Bottom right floating torus */}
       <Float speed={1.5} rotationIntensity={2} floatIntensity={1.5} position={[5, -3, -4]}>
         <Torus args={[1.4, 0.4, 32, 64]}>
           <meshPhysicalMaterial
-            color="#e8d5a3"
+            color="#8f5267"
             transmission={0.6}
             opacity={1}
             metalness={0.3}
@@ -120,7 +120,7 @@ export default function InteractiveBackground() {
       >
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
-        <directionalLight position={[-10, -10, -5]} intensity={1.5} color="#e8d5a3" />
+        <directionalLight position={[-10, -10, -5]} intensity={1.5} color="#8f5267" />
         <spotLight position={[0, 5, 5]} intensity={2} color="#ffffff" penumbra={1} />
         <FloatingShapes />
       </Canvas>

@@ -29,11 +29,11 @@ export default function LuxuryShell({
 }: LuxuryShellProps) {
   const isDark = backgroundVariant === 'dark'
   const contentAlignClass = contentAlign === 'start' ? 'justify-start pt-4 sm:pt-6' : 'justify-center'
-  const brandClass = isDark ? 'text-[#d6ba78]' : 'text-[#9d742f]'
-  const titleClass = isDark ? 'text-[#f0d7a1]' : 'text-[#3d2a1a]'
+  const brandClass = isDark ? 'text-[#c69aad]' : 'text-[#7c4258]'
+  const titleClass = isDark ? 'text-[#f7edf0]' : 'text-[#332631]'
   const subtitleClass = isDark
-    ? 'text-[rgba(242,226,194,0.68)]'
-    : 'text-[rgba(61,42,26,0.72)]'
+    ? 'text-[rgba(246,235,239,0.68)]'
+    : 'text-[rgba(51,38,49,0.72)]'
 
   return (
     <div className="relative isolate min-h-dvh">
