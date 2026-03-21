@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/useAppStore'
 import { DICT } from '@/dictionaries'
+import { createHoverLift, createTapPress, fadeUpTransition } from './motion'
 
 export default function EndSessionButton() {
   const router = useRouter()
@@ -20,9 +21,9 @@ export default function EndSessionButton() {
       onClick={handleEnd}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      whileHover={{ scale: 1.012, y: -1 }}
-      whileTap={{ scale: 0.99, y: 0 }}
+      transition={fadeUpTransition(0.14, 0.22)}
+      whileHover={createHoverLift()}
+      whileTap={createTapPress()}
       className="
         flex items-center gap-1.5 px-3.5 py-2 rounded-full
         text-[11px] font-sans font-medium tracking-wide

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import InteractiveBeautyBackground from './InteractiveBeautyBackground'
 import BackButton from './BackButton'
 import EndSessionButton from './EndSessionButton'
+import { fadeUpTransition } from './motion'
 
 interface PageShellProps {
   children: ReactNode
@@ -30,9 +31,9 @@ export default function PageShell({
         {/* Top bar: brand name left, end-session right */}
         <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 py-3.5 pointer-events-none">
           <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={fadeUpTransition(0.05, 0.22)}
             className="font-serif text-sm font-semibold tracking-[0.18em] text-[#7c4258] pointer-events-none select-none"
           >
             TINTEL
@@ -47,7 +48,7 @@ export default function PageShell({
           <motion.p
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={fadeUpTransition(0, 0.22)}
             className="mb-4 rounded-full border border-[rgba(107,35,57,0.2)] bg-[rgba(255,255,255,0.52)] px-4 py-1.5 text-xs font-sans tracking-widest uppercase text-[#7c4258]"
           >
             {contextPill}
@@ -57,9 +58,9 @@ export default function PageShell({
         {/* Page title */}
         {title && (
           <motion.h1
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={fadeUpTransition(0.02, 0.28)}
             className="mb-8 text-center font-serif text-4xl font-semibold text-[#332631] md:text-5xl"
           >
             {title}

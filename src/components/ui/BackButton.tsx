@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/useAppStore'
 import { DICT } from '@/dictionaries'
+import { createHoverLift, createTapPress, fadeUpTransition } from './motion'
 
 export default function BackButton({ label }: { label?: string }) {
   const router = useRouter()
@@ -15,9 +16,9 @@ export default function BackButton({ label }: { label?: string }) {
       onClick={() => router.back()}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 0.4 }}
-      whileHover={{ scale: 1.012, y: -1 }}
-      whileTap={{ scale: 0.99, y: 0 }}
+      transition={fadeUpTransition(0.12, 0.22)}
+      whileHover={createHoverLift()}
+      whileTap={createTapPress()}
       className="
         mt-6 px-7 py-2.5 rounded-full
         text-sm font-sans font-medium tracking-wide

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useSpring, useTransform } from 'framer-motion'
 
 type BackgroundVariant = 'light' | 'dark'
 
@@ -111,8 +111,18 @@ export default function InteractiveBeautyBackground({
   variant = 'light',
 }: BeautyBackgroundProps) {
   const [mounted, setMounted] = useState(false)
+  const [motionProfile, setMotionProfile] = useState<'full' | 'lite' | 'static'>('lite')
+  const prefersReducedMotion = useReducedMotion()
   const pointerRange =
-    variant === 'dark'
+    motionProfile !== 'full'
+      ? {
+          aura: ['0%', '0%'],
+          ribbon: ['0%', '0%'],
+          particle: ['0%', '0%'],
+          veil: ['0%', '0%'],
+          vertical: ['0%', '0%'],
+        }
+      : variant === 'dark'
       ? {
           aura: ['2%', '-2%'],
           ribbon: ['4%', '-4%'],
@@ -140,9 +150,60 @@ export default function InteractiveBeautyBackground({
   const veilY = useTransform(pointerY, [-1, 1], pointerRange.vertical)
 
   const palette = getPalette(variant)
+  const isStatic = motionProfile === 'static' || prefersReducedMotion
+  const isLite = motionProfile !== 'full'
+  const activeMists = isLite ? MISTS.slice(0, 2) : MISTS
+  const activeAuras = isLite ? AURAS.slice(0, 3) : AURAS
+  const activeFilaments = isLite ? FILAMENTS.slice(0, 2) : FILAMENTS
+  const activeRibbons = isLite ? RIBBONS.slice(0, 3) : RIBBONS
+  const activeVeils = isLite ? VEILS.slice(0, 2) : VEILS
+  const activeDustParticles = isLite ? [] : DUST_PARTICLES
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
+
+    const updateProfile = () => {
+      if (prefersReducedMotion) {
+        setMotionProfile('static')
+        return
+      }
+
+      const compactViewport = window.innerWidth < 1024
+      const lowPowerDevice =
+        typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4
+
+      if (!finePointerQuery.matches || compactViewport || lowPowerDevice) {
+        setMotionProfile('lite')
+        return
+      }
+
+      setMotionProfile('full')
+    }
+
+    updateProfile()
+    finePointerQuery.addEventListener('change', updateProfile)
+    window.addEventListener('resize', updateProfile)
+
+    return () => {
+      finePointerQuery.removeEventListener('change', updateProfile)
+      window.removeEventListener('resize', updateProfile)
+    }
+  }, [prefersReducedMotion])
+
+  useEffect(() => {
+    if (motionProfile !== 'full') {
+      pointerX.set(0)
+      pointerY.set(0)
+      return
+    }
 
     const handlePointerMove = (event: PointerEvent) => {
       pointerX.set((event.clientX / window.innerWidth) * 2 - 1)
@@ -167,7 +228,7 @@ export default function InteractiveBeautyBackground({
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('touchmove', handleTouchMove)
     }
-  }, [pointerX, pointerY])
+  }, [motionProfile, pointerX, pointerY])
 
   return (
     <div
@@ -192,13 +253,21 @@ export default function InteractiveBeautyBackground({
               : 'linear-gradient(118deg, rgba(255,255,255,0) 16%, rgba(255,255,255,0.44) 34%, rgba(232,210,185,0.26) 50%, rgba(255,255,255,0.06) 64%, rgba(255,255,255,0) 78%)',
           filter: variant === 'dark' ? 'blur(56px)' : 'blur(42px)',
         }}
-        animate={{
-          rotate: [-7, -3, -7],
-          x: [0, 26, 0],
-          y: [0, -16, 0],
-          opacity: variant === 'dark' ? [0.14, 0.22, 0.16] : [0.38, 0.54, 0.4],
-        }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        animate={
+          isStatic
+            ? { opacity: variant === 'dark' ? 0.14 : 0.38 }
+            : {
+                rotate: isLite ? [-4, -2, -4] : [-7, -3, -7],
+                x: isLite ? [0, 10, 0] : [0, 26, 0],
+                y: isLite ? [0, -8, 0] : [0, -16, 0],
+                opacity: variant === 'dark' ? [0.14, 0.22, 0.16] : [0.38, 0.54, 0.4],
+              }
+        }
+        transition={
+          isStatic
+            ? undefined
+            : { duration: isLite ? 28 : 22, repeat: Infinity, ease: 'easeInOut' }
+        }
       />
 
       <div
@@ -227,15 +296,23 @@ export default function InteractiveBeautyBackground({
           background: palette.coreGlow,
           filter: variant === 'dark' ? 'blur(50px)' : 'blur(52px)',
         }}
-        animate={{
-          opacity: variant === 'dark' ? [0.24, 0.38, 0.28] : [0.66, 0.82, 0.7],
-          scale: [0.97, 1.04, 0.99],
-        }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+        animate={
+          isStatic
+            ? { opacity: variant === 'dark' ? 0.28 : 0.7, scale: 1 }
+            : {
+                opacity: variant === 'dark' ? [0.24, 0.38, 0.28] : [0.66, 0.82, 0.7],
+                scale: isLite ? [0.99, 1.02, 1] : [0.97, 1.04, 0.99],
+              }
+        }
+        transition={
+          isStatic
+            ? undefined
+            : { duration: isLite ? 22 : 16, repeat: Infinity, ease: 'easeInOut' }
+        }
       />
 
-      <motion.div className="absolute inset-0" style={{ x: ribbonX, y: auraY }}>
-        {MISTS.map((mist, index) => (
+      <motion.div className="absolute inset-0" style={{ x: ribbonX, y: auraY, willChange: 'transform' }}>
+        {activeMists.map((mist, index) => (
           <motion.div
             key={`${variant}-mist-${index}`}
             className="absolute rounded-full"
@@ -249,24 +326,33 @@ export default function InteractiveBeautyBackground({
               filter: variant === 'dark' ? 'blur(34px)' : 'blur(26px)',
               opacity: variant === 'dark' ? 0.34 : 0.42,
             }}
-            animate={{
-              x: [0, 18, -10, 0],
-              y: [0, -14, 10, 0],
-              opacity: variant === 'dark' ? [0.22, 0.4, 0.26, 0.22] : [0.38, 0.58, 0.42, 0.38],
-              scale: [1, 1.04, 0.98, 1],
-            }}
-            transition={{
-              duration: 28,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: mist.delay,
-            }}
+            animate={
+              isStatic
+                ? { opacity: variant === 'dark' ? 0.22 : 0.38, scale: 1 }
+                : {
+                    x: isLite ? [0, 8, -4, 0] : [0, 18, -10, 0],
+                    y: isLite ? [0, -8, 6, 0] : [0, -14, 10, 0],
+                    opacity:
+                      variant === 'dark' ? [0.22, 0.4, 0.26, 0.22] : [0.38, 0.58, 0.42, 0.38],
+                    scale: isLite ? [1, 1.02, 0.99, 1] : [1, 1.04, 0.98, 1],
+                  }
+            }
+            transition={
+              isStatic
+                ? undefined
+                : {
+                    duration: isLite ? 32 : 28,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: mist.delay,
+                  }
+            }
           />
         ))}
       </motion.div>
 
-      <motion.div className="absolute inset-0" style={{ x: auraX, y: auraY }}>
-        {AURAS.map((aura, index) => (
+      <motion.div className="absolute inset-0" style={{ x: auraX, y: auraY, willChange: 'transform' }}>
+        {activeAuras.map((aura, index) => (
           <motion.div
             key={`${variant}-aura-${index}`}
             className="absolute rounded-full"
@@ -278,23 +364,32 @@ export default function InteractiveBeautyBackground({
               background: palette.glow[index % palette.glow.length],
               filter: 'blur(70px)',
             }}
-            animate={{
-              scale: [1, 1.08, 0.98, 1],
-              opacity: variant === 'dark' ? [0.35, 0.52, 0.28, 0.35] : [0.58, 0.82, 0.46, 0.58],
-              y: [0, -12, 8, 0],
-            }}
-            transition={{
-              duration: 18,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: aura.delay,
-            }}
+            animate={
+              isStatic
+                ? { opacity: variant === 'dark' ? 0.35 : 0.58, scale: 1 }
+                : {
+                    scale: isLite ? [1, 1.04, 0.99, 1] : [1, 1.08, 0.98, 1],
+                    opacity:
+                      variant === 'dark' ? [0.35, 0.52, 0.28, 0.35] : [0.58, 0.82, 0.46, 0.58],
+                    y: isLite ? [0, -6, 4, 0] : [0, -12, 8, 0],
+                  }
+            }
+            transition={
+              isStatic
+                ? undefined
+                : {
+                    duration: isLite ? 22 : 18,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: aura.delay,
+                  }
+            }
           />
         ))}
       </motion.div>
 
-      <motion.div className="absolute inset-0" style={{ x: veilX, y: ribbonY }}>
-        {FILAMENTS.map((filament, index) => (
+      <motion.div className="absolute inset-0" style={{ x: veilX, y: ribbonY, willChange: 'transform' }}>
+        {activeFilaments.map((filament, index) => (
           <motion.div
             key={`${variant}-filament-${index}`}
             className="absolute rounded-full"
@@ -308,23 +403,31 @@ export default function InteractiveBeautyBackground({
               filter: 'blur(0.4px)',
               opacity: variant === 'dark' ? 0.5 : 0.66,
             }}
-            animate={{
-              opacity: variant === 'dark' ? [0.14, 0.42, 0.16, 0.14] : [0.3, 0.7, 0.36, 0.3],
-              scaleX: [0.94, 1.04, 0.96, 0.94],
-              x: [0, 10, -6, 0],
-            }}
-            transition={{
-              duration: 18,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: filament.delay,
-            }}
+            animate={
+              isStatic
+                ? { opacity: variant === 'dark' ? 0.14 : 0.3, scaleX: 1 }
+                : {
+                    opacity: variant === 'dark' ? [0.14, 0.42, 0.16, 0.14] : [0.3, 0.7, 0.36, 0.3],
+                    scaleX: isLite ? [0.98, 1.02, 0.99, 0.98] : [0.94, 1.04, 0.96, 0.94],
+                    x: isLite ? [0, 4, -2, 0] : [0, 10, -6, 0],
+                  }
+            }
+            transition={
+              isStatic
+                ? undefined
+                : {
+                    duration: isLite ? 22 : 18,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: filament.delay,
+                  }
+            }
           />
         ))}
       </motion.div>
 
-      <motion.div className="absolute inset-0" style={{ x: ribbonX, y: ribbonY }}>
-        {RIBBONS.map((ribbon, index) => (
+      <motion.div className="absolute inset-0" style={{ x: ribbonX, y: ribbonY, willChange: 'transform' }}>
+        {activeRibbons.map((ribbon, index) => (
           <motion.div
             key={`${variant}-ribbon-${index}`}
             className="absolute rounded-full"
@@ -342,24 +445,32 @@ export default function InteractiveBeautyBackground({
                   ? '1px solid rgba(255,255,255,0.06)'
                   : '1px solid rgba(255,255,255,0.28)',
             }}
-            animate={{
-              x: [0, 12, -6, 0],
-              y: [0, -10, 6, 0],
-              opacity:
-                variant === 'dark' ? [0.26, 0.36, 0.24, 0.26] : [0.42, 0.56, 0.38, 0.42],
-            }}
-            transition={{
-              duration: 22,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: ribbon.delay,
-            }}
+            animate={
+              isStatic
+                ? { opacity: variant === 'dark' ? 0.26 : 0.42 }
+                : {
+                    x: isLite ? [0, 6, -3, 0] : [0, 12, -6, 0],
+                    y: isLite ? [0, -5, 3, 0] : [0, -10, 6, 0],
+                    opacity:
+                      variant === 'dark' ? [0.26, 0.36, 0.24, 0.26] : [0.42, 0.56, 0.38, 0.42],
+                  }
+            }
+            transition={
+              isStatic
+                ? undefined
+                : {
+                    duration: isLite ? 28 : 22,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: ribbon.delay,
+                  }
+            }
           />
         ))}
       </motion.div>
 
-      <motion.div className="absolute inset-0" style={{ x: veilX, y: veilY }}>
-        {VEILS.map((veil, index) => (
+      <motion.div className="absolute inset-0" style={{ x: veilX, y: veilY, willChange: 'transform' }}>
+        {activeVeils.map((veil, index) => (
           <motion.div
             key={`${variant}-veil-${index}`}
             className="absolute rounded-full"
@@ -373,17 +484,25 @@ export default function InteractiveBeautyBackground({
               opacity: variant === 'dark' ? 0.26 : 0.34,
               filter: 'blur(38px)',
             }}
-            animate={{
-              x: [0, 16, -8, 0],
-              y: [0, -12, 10, 0],
-              opacity: variant === 'dark' ? [0.18, 0.3, 0.2, 0.18] : [0.3, 0.5, 0.34, 0.3],
-            }}
-            transition={{
-              duration: 24,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: veil.delay,
-            }}
+            animate={
+              isStatic
+                ? { opacity: variant === 'dark' ? 0.18 : 0.3 }
+                : {
+                    x: isLite ? [0, 8, -4, 0] : [0, 16, -8, 0],
+                    y: isLite ? [0, -6, 5, 0] : [0, -12, 10, 0],
+                    opacity: variant === 'dark' ? [0.18, 0.3, 0.2, 0.18] : [0.3, 0.5, 0.34, 0.3],
+                  }
+            }
+            transition={
+              isStatic
+                ? undefined
+                : {
+                    duration: isLite ? 30 : 24,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: veil.delay,
+                  }
+            }
           />
         ))}
       </motion.div>
@@ -396,13 +515,13 @@ export default function InteractiveBeautyBackground({
           opacity: variant === 'dark' ? 0.18 : 0.24,
           maskImage: 'radial-gradient(circle at center, transparent 34%, black 54%, transparent 72%)',
         }}
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 52, repeat: Infinity, ease: 'linear' }}
+        animate={isStatic || isLite ? undefined : { rotate: [0, 360] }}
+        transition={isStatic || isLite ? undefined : { duration: 52, repeat: Infinity, ease: 'linear' }}
       />
 
-      {mounted && (
-        <motion.div className="absolute inset-0" style={{ x: particleX, y: particleY }}>
-          {DUST_PARTICLES.map((particle, index) => (
+      {mounted && activeDustParticles.length > 0 && (
+        <motion.div className="absolute inset-0" style={{ x: particleX, y: particleY, willChange: 'transform' }}>
+          {activeDustParticles.map((particle, index) => (
             <motion.div
               key={`${variant}-dust-${index}`}
               className="absolute rounded-full"

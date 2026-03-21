@@ -2,6 +2,7 @@
 
 import { motion, HTMLMotionProps } from 'framer-motion'
 import { ReactNode } from 'react'
+import { createHoverLift, createTapPress, MOTION_EASE } from './motion'
 
 type GoldButtonProps = HTMLMotionProps<'button'> & {
   children: ReactNode
@@ -31,15 +32,20 @@ export default function GoldButton({
 
   return (
     <motion.button
-      transition={{ type: 'spring', stiffness: 280, damping: 20, mass: 0.7 }}
-      whileHover={disabled ? {} : {
-        y: -1,
-        scale: 1.012,
-        boxShadow: variant === 'solid'
-          ? '0 14px 34px rgba(65,31,46,0.26)'
-          : '0 10px 24px rgba(65,31,46,0.12)',
-      }}
-      whileTap={disabled ? {} : { scale: 0.988, y: 0 }}
+      transition={{ duration: 0.16, ease: MOTION_EASE }}
+      whileHover={
+        disabled
+          ? undefined
+          : createHoverLift({
+              y: -2,
+              scale: 1.008,
+              boxShadow:
+                variant === 'solid'
+                  ? '0 14px 30px rgba(65,31,46,0.22)'
+                  : '0 10px 22px rgba(65,31,46,0.1)',
+            })
+      }
+      whileTap={disabled ? undefined : createTapPress()}
       disabled={disabled}
       className={`${base} ${variant === 'solid' ? solid : ghost} ${className}`}
       {...rest}

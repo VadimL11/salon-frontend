@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ReactNode } from 'react'
+import { createHoverLift, createTapPress, fadeUpTransition } from './motion'
 
 interface DarkGlassCardProps {
   children: ReactNode
@@ -20,14 +21,18 @@ export default function DarkGlassCard({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={onClick ? {
-        y: -2,
-        scale: 1.01,
-        boxShadow: '0 18px 40px rgba(63,31,44,0.18), inset 0 1px 0 rgba(255,255,255,0.05)',
-        borderColor: 'rgba(143,82,103,0.32)',
-      } : undefined}
-      whileTap={onClick ? { scale: 0.992, y: 0 } : undefined}
+      transition={fadeUpTransition(delay, 0.3)}
+      whileHover={
+        onClick
+          ? createHoverLift({
+              y: -2,
+              scale: 1.008,
+              boxShadow: '0 16px 32px rgba(63,31,44,0.16), inset 0 1px 0 rgba(255,255,255,0.05)',
+              borderColor: 'rgba(143,82,103,0.26)',
+            })
+          : undefined
+      }
+      whileTap={onClick ? createTapPress() : undefined}
       onClick={onClick}
       className={`rounded-2xl p-6 ${onClick ? 'cursor-pointer' : ''} transition-colors duration-150 select-none ${className}`}
       style={{

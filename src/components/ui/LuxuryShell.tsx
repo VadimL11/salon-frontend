@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import InteractiveBeautyBackground from './InteractiveBeautyBackground'
 import BackButton from './BackButton'
 import EndSessionButton from './EndSessionButton'
+import { fadeUpTransition } from './motion'
 
 interface LuxuryShellProps {
   children: ReactNode
@@ -44,6 +45,7 @@ export default function LuxuryShell({
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={fadeUpTransition(0.04, 0.22)}
               className={`font-serif text-xs tracking-[0.35em] uppercase ${brandClass}`}
             >
               TINTEL BEAUTY
@@ -55,7 +57,7 @@ export default function LuxuryShell({
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              transition={fadeUpTransition(0.02, 0.3)}
               className={`w-full ${maxWidth}`}
             >
               {(title || subtitle) && (
