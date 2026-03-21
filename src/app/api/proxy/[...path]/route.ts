@@ -1,17 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { getApiBaseUrl } from '@/lib/apiBaseUrl'
 
-const DEFAULT_BACKEND_BASE_URL = 'http://localhost:8080/api/v1'
 const AUTH_COOKIE_NAME = 'SALON_AUTH'
 const AUTH_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 7
 
-function normalizeBaseUrl(url: string) {
-  return url.endsWith('/') ? url.slice(0, -1) : url
-}
-
 function getBackendBaseUrl() {
-  return normalizeBaseUrl(
-    process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || DEFAULT_BACKEND_BASE_URL
-  )
+  return getApiBaseUrl()
 }
 
 function getTargetUrl(request: NextRequest, path: string[]) {

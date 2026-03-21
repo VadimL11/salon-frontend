@@ -1,23 +1,9 @@
-const DEFAULT_API_BASE_URL = '/api/proxy'
-
-function normalizeBaseUrl(url: string) {
-  return url.endsWith('/') ? url.slice(0, -1) : url
-}
+import { getApiBaseUrl as getConfiguredApiBaseUrl } from '@/lib/apiBaseUrl'
 
 function getApiBaseUrl() {
-  const configuredBaseUrl = normalizeBaseUrl(
-    process.env.NEXT_PUBLIC_API_BASE_URL || DEFAULT_API_BASE_URL
+  return getConfiguredApiBaseUrl(
+    typeof window !== 'undefined' ? window.location.origin : undefined
   )
-
-  if (/^https?:\/\//i.test(configuredBaseUrl)) {
-    return configuredBaseUrl
-  }
-
-  if (typeof window !== 'undefined') {
-    return normalizeBaseUrl(new URL(configuredBaseUrl, window.location.origin).toString())
-  }
-
-  return normalizeBaseUrl(new URL(configuredBaseUrl, 'http://localhost').toString())
 }
 
 export function clearLegacyAuthToken() {
